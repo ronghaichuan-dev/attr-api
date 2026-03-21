@@ -1,0 +1,53 @@
+server:
+  env: "dev"
+  address: ":12003"
+  serverRoot: "public"
+  indexFiles: ["index.html"]
+
+logger:
+  path: "/tmp/logs"
+
+database:
+  logger:
+    level: "all"
+    stdout: true
+    path: "/tmp/logs/sql"
+  default:
+    type: "mysql"
+    host: "127.0.0.1"
+    port: 3306
+    user: "root"
+    pass: "chuan1992"
+    name: "god_help_service"
+    charset: "utf8mb4"
+    debug: true
+    prefix: ""
+    pool:
+      maxIdle: 5
+      maxOpen: 10
+      maxLifetime: "300s"
+
+redis:
+  default:
+    address: "127.0.0.1:6379"
+    db: 0
+    pass: ""
+    pool:
+      maxIdle: 10
+      maxActive: 100
+      idleTimeout: "180s"
+
+jwt:
+  secret: "god-help-service-jwt-secret-key-2025"
+  expire: "7776000s"  # 30 days
+
+appstore:
+  env: "sandbox"  # 环境配置：sandbox, production
+
+gfcli:
+  gen:
+    dao:
+      - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/god_help_service"
+        tables: "users"
+        descriptionTag: true
+

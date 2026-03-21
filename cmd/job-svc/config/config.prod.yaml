@@ -1,0 +1,61 @@
+server:
+  env: "prod"
+  address: ":8080"
+  serverRoot: "public"
+  indexFiles: ["index.html"]
+
+logger:
+  level: "all"        # 日志级别：all,debug,info,notice,warning,error,critical,panic,fatal
+  path: "./tmp/logs"   # 日志文件存储路径
+  stdout: true         # 是否输出到标准输出
+  file: "{Y-m-d}.log" # 日志文件命名格式
+  size: "100M"         # 单个日志文件大小限制
+  backup: 10           # 日志文件备份数量
+  compress: true       # 是否压缩备份的日志文件
+  format: "console"    # 日志格式：console,json
+  date: "Y-m-d H:i:s"  # 日志时间格式
+
+# 数据库配置
+database:
+  logger:
+    level: "all"
+    stdout: true
+    path: "./tmp/logs/sql"
+  default:
+    type: "mysql"
+    host: "127.0.0.1"
+    port: 3306
+    user: "root"
+    pass: "chuan1992"
+    name: "rszai"
+    charset: "utf8mb4"
+    debug: true
+    prefix: ""
+    pool:
+      maxIdle: 5
+      maxOpen: 10
+      maxLifetime: "300s"
+
+# Redis配置
+redis:
+  default:
+    address: "127.0.0.1:6379"
+    db: 0
+    pass: ""
+    pool:
+      maxIdle: 10
+      maxActive: 100
+      idleTimeout: "180s"
+
+# JWT配置
+jwt:
+  secret: "god-help-service-jwt-secret-key-2025"
+  expire: "7776000s"  # 30 days
+
+# GF命令行工具配置
+gfcli:
+  gen:
+    dao:
+      - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/god_help_service"
+        tables: "users"
+        descriptionTag: true

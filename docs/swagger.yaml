@@ -1,0 +1,19 @@
+basePath: /
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+    url: http://www.example.com/support
+  description: 管理后台服务 API 文档
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: God Help Service API
+  version: "1.0"
+paths: {}
+schemes:
+- http
+- https
+swagger: "2.0"

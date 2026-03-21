@@ -1,0 +1,14 @@
+docker/config.yaml
+*.tar.gz
+*.log
+*.tmp
+*.temp
+upload
+.idea
+.vscode
+tmp
+*.zip
+rszai-api
+rzsai
+*.json
+*.conf

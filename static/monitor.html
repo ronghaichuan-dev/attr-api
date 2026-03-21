@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoFrame框架内存监控</title>
+    <!-- 引入ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 引入Bootstrap样式 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .refresh-info {
+            text-align: right;
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GoFrame框架内存监控</h1>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value" id="current-alloc">0</div>
+                <div class="stat-label">当前分配内存 (MB)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="total-alloc">0</div>
+                <div class="stat-label">累计分配内存 (MB)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="sys-memory">0</div>
+                <div class="stat-label">系统内存 (MB)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="live-objects">0</div>
+                <div class="stat-label">存活对象数</div>
+            </div>
+        </div>
+        
+        <div class="chart-container" id="memory-chart"></div>
+        
+        <div class="refresh-info">
+            <span id="last-refresh">最后刷新: 从未</span>
+            <button class="btn btn-sm btn-primary ml-2" onclick="refreshData()">手动刷新</button>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化图表
+        var chart = echarts.init(document.getElementById('memory-chart'));
+        
+        // 图表配置
+        var option = {
+            title: {
+                text: '内存占用趋势',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function(params) {
+                    var result = params[0].name + '<br/>';
+                    params.forEach(function(item) {
+                        result += item.marker + item.seriesName + ': ' + (item.value / 1024 / 1024).toFixed(2) + ' MB<br/>';
+                    });
+                    return result;
+                }
+            },
+            legend: {
+                data: ['当前分配内存', '累计分配内存', '系统内存'],
+                top: 30
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: []
+            },
+            yAxis: {
+                type: 'value',
+                name: '内存 (MB)',
+                axisLabel: {
+                    formatter: function(value) {
+                        return (value / 1024 / 1024).toFixed(0);
+                    }
+                }
+            },
+            series: [
+                {
+                    name: '当前分配内存',
+                    type: 'line',
+                    data: [],
+                    smooth: true,
+                    lineStyle: {
+                        color: '#007bff'
+                    }
+                },
+                {
+                    name: '累计分配内存',
+                    type: 'line',
+                    data: [],
+                    smooth: true,
+                    lineStyle: {
+                        color: '#28a745'
+                    }
+                },
+                {
+                    name: '系统内存',
+                    type: 'line',
+                    data: [],
+                    smooth: true,
+                    lineStyle: {
+                        color: '#ffc107'
+                    }
+                }
+            ]
+        };
+        
+        chart.setOption(option);
+        
+        // 刷新数据
+        function refreshData() {
+            // 获取内存监控数据
+            fetch('/api/v1/notification/memory')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        updateChart(data.data);
+                        updateStats(data.data[data.data.length - 1]);
+                        
+                        // 更新最后刷新时间
+                        var now = new Date();
+                        var timeString = now.toLocaleString();
+                        document.getElementById('last-refresh').textContent = '最后刷新: ' + timeString;
+                    }
+                })
+                .catch(error => {
+                    console.error('获取数据失败:', error);
+                });
+        }
+        
+        // 更新图表
+        function updateChart(stats) {
+            var timestamps = [];
+            var allocData = [];
+            var totalAllocData = [];
+            var sysData = [];
+            
+            stats.forEach(function(item) {
+                // 格式化时间
+                var date = new Date(item.timestamp);
+                var timeStr = date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+                timestamps.push(timeStr);
+                
+                // 内存数据（转换为字节）
+                allocData.push(item.alloc);
+                totalAllocData.push(item.totalAlloc);
+                sysData.push(item.sys);
+            });
+            
+            // 更新图表数据
+            chart.setOption({
+                xAxis: {
+                    data: timestamps
+                },
+                series: [
+                    {
+                        data: allocData
+                    },
+                    {
+                        data: totalAllocData
+                    },
+                    {
+                        data: sysData
+                    }
+                ]
+            });
+        }
+        
+        // 更新统计信息
+        function updateStats(latestStat) {
+            // 转换为MB
+            var allocMB = (latestStat.alloc / 1024 / 1024).toFixed(2);
+            var totalAllocMB = (latestStat.totalAlloc / 1024 / 1024).toFixed(2);
+            var sysMB = (latestStat.sys / 1024 / 1024).toFixed(2);
+            var liveObjects = latestStat.liveObjects;
+            
+            // 更新DOM
+            document.getElementById('current-alloc').textContent = allocMB;
+            document.getElementById('total-alloc').textContent = totalAllocMB;
+            document.getElementById('sys-memory').textContent = sysMB;
+            document.getElementById('live-objects').textContent = liveObjects;
+        }
+        
+        // 初始刷新
+        refreshData();
+        
+        // 定时刷新（每30秒）
+        setInterval(refreshData, 30000);
+        
+        // 响应式调整
+        window.addEventListener('resize', function() {
+            chart.resize();
+        });
+    </script>
+</body>
+</html>
