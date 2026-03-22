@@ -14,7 +14,7 @@ type AttrSubscriptionTransaction struct {
 	OriginalTransactionId string `json:"originalTransactionId" orm:"original_transaction_id" description:"原始交易ID"`                                  // 原始交易ID
 	TransactionId         string `json:"transactionId"         orm:"transaction_id"          description:"子交易ID"`                                   // 子交易ID
 	InAppOwnership        string `json:"inAppOwnership"        orm:"in_app_ownership"        description:"是否为用户购买 PURCHASED-购买 FAMILY_SHARED-家庭分享"` // 是否为用户购买 PURCHASED-购买 FAMILY_SHARED-家庭分享
-	Uuid                  string `json:"uuid"                  orm:"uuid"                    description:"用户ID"`                                    // 用户ID
+	Rsid                  string `json:"rsid"                  orm:"rsid"                    description:"用户设备ID"`                                  // 用户设备ID
 	ProductId             string `json:"productId"             orm:"product_id"              description:"sku"`                                     // sku
 	Price                 int64  `json:"price"                 orm:"price"                   description:"订阅金额"`                                    // 订阅金额
 	Currency              string `json:"currency"              orm:"currency"                description:"币种"`                                      // 币种

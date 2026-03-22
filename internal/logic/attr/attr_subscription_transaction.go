@@ -38,7 +38,7 @@ func (s *sAttr) SaveAttrSubscriptionTransaction(ctx context.Context, notificatio
 		if err != nil && !gerror.Equal(err, sql.ErrNoRows) {
 			return err
 		}
-		data.Uuid = info.Uuid
+		data.Rsid = info.Rsid
 
 		if v2.Data.TransactionInfo.Environment != "" {
 			data.Envirment = v2.Data.TransactionInfo.Environment

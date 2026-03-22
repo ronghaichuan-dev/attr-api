@@ -1,4 +1,8 @@
 services:
+  # ========================
+  # 基础设施服务
+  # ========================
+
   localstack:
     image: localstack/localstack:latest
     container_name: god-help-localstack
@@ -12,14 +16,56 @@ services:
       - PORT_WEB_UI=8080
       - LAMBDA_EXECUTOR=docker-reuse
       - EAGER_SERVICE_LOADING=1
-#    volumes:
-#      - ./docker/localstack/data:/tmp/localstack/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4566/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  # ========================
+  # 应用服务
+  # ========================
+  admin-svc:
+    build:
+      context: .
+      dockerfile: cmd/admin-svc/Dockerfile
+    image: admin-svc:latest
+    container_name: god-help-admin-svc
+    restart: unless-stopped
+    ports:
+      - "8802:8802"
+    volumes:
+      - ./cmd/admin-svc/config:/app/config
+
+  job-svc:
+    build:
+      context: .
+      dockerfile: cmd/job-svc/Dockerfile
+    image: job-svc:latest
+    container_name: god-help-job-svc
+    restart: unless-stopped
+    ports:
+      - "8803:8803"
+    volumes:
+      - ./cmd/job-svc/config:/app/config
+
+  notification-svc:
+    build:
+      context: .
+      dockerfile: cmd/notification-svc/Dockerfile
+    image: notification-svc:latest
+    container_name: god-help-notification-svc
+    restart: unless-stopped
+    ports:
+      - "8801:8801"
+    volumes:
+      - ./cmd/notification-svc/config:/app/config
+    depends_on:
+      localstack:
+        condition: service_healthy
+
 volumes:
-  localstack_data:
+  mysql_data:
+    driver: local
+  redis_data:
     driver: local

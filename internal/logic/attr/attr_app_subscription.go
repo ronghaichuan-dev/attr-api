@@ -27,7 +27,7 @@ func (s *sAttr) HandleTrialFreeSubscribe(ctx context.Context, environment, appid
 				Environment:           environment,
 				OrignialTransactionId: payload.OriginalTransactionId,
 				Appid:                 appid,
-				Uuid:                  uuid,
+				Rsid:                  uuid,
 				IsTrial:               consts.IsTrialFreeYes,
 				IsPaid:                consts.IsPaidNo,
 				LastEventAt:           time.Now().Unix(),

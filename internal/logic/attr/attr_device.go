@@ -24,13 +24,13 @@ func (s *sAttr) UpdateAttrDeviceField(ctx context.Context, tx gdb.TX, uuid strin
 
 func (s *sAttr) GetAttrDevice(ctx context.Context, uuid []string) (map[string]struct{}, error) {
 	var list []*entity.AttrDevice
-	err := dao.AttrDevice.Ctx(ctx).Fields(dao.AttrDevice.Columns().Uuid, dao.AttrDevice.Columns().Id).WhereIn("uuid", uuid).Scan(&list)
+	err := dao.AttrDevice.Ctx(ctx).Fields(dao.AttrDevice.Columns().Rsid, dao.AttrDevice.Columns().Id).WhereIn("uuid", uuid).Scan(&list)
 	if err != nil {
 		return nil, err
 	}
 	deviceMap := make(map[string]struct{})
 	for _, device := range list {
-		deviceMap[device.Uuid] = struct{}{}
+		deviceMap[device.Rsid] = struct{}{}
 	}
 	return deviceMap, nil
 }
@@ -42,7 +42,7 @@ func (s *sAttr) CreateAttrDeviceOrUpdate(ctx context.Context, appid, uuid, count
 	}
 	if count == 0 {
 		data := entity.AttrDevice{
-			Uuid:               uuid,
+			Rsid:               uuid,
 			Appid:              appid,
 			AttrSubscriptionId: 0,
 			Country:            country,

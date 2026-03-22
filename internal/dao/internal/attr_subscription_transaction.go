@@ -29,7 +29,7 @@ type AttrSubscriptionTransactionColumns struct {
 	OriginalTransactionId string // 原始交易ID
 	TransactionId         string // 子交易ID
 	InAppOwnership        string // 是否为用户购买 PURCHASED-购买 FAMILY_SHARED-家庭分享
-	Uuid                  string // 用户ID
+	Rsid                  string // 用户设备ID
 	ProductId             string // sku
 	Price                 string // 订阅金额
 	Currency              string // 币种
@@ -48,7 +48,7 @@ var attrSubscriptionTransactionColumns = AttrSubscriptionTransactionColumns{
 	OriginalTransactionId: "original_transaction_id",
 	TransactionId:         "transaction_id",
 	InAppOwnership:        "in_app_ownership",
-	Uuid:                  "uuid",
+	Rsid:                  "rsid",
 	ProductId:             "product_id",
 	Price:                 "price",
 	Currency:              "currency",

@@ -24,7 +24,7 @@ type AttrAppSubscriptionsColumns struct {
 	Id                    string // id
 	Environment           string // 环境
 	OrignialTransactionId string // 原始交易ID
-	Uuid                  string // 用户设备ID
+	Rsid                  string // 用户设备ID
 	Appid                 string // appID
 	ProductId             string // 产品ID
 	Status                string // 订阅状态 1-自动续订服务已激活 2-自动续订服务已过期自动  3-自动续订服务目前处于计费重试期 4-自动续订服务目前处于账单宽限期 5-自动续订订阅已取消
@@ -43,7 +43,7 @@ var attrAppSubscriptionsColumns = AttrAppSubscriptionsColumns{
 	Id:                    "id",
 	Environment:           "environment",
 	OrignialTransactionId: "orignial_transaction_id",
-	Uuid:                  "uuid",
+	Rsid:                  "rsid",
 	Appid:                 "appid",
 	ProductId:             "product_id",
 	Status:                "status",

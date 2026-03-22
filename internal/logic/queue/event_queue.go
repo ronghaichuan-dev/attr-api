@@ -301,7 +301,7 @@ func (s *sQueue) handleSubscribeFixEvent(ctx context.Context, originalTransactio
 	if err != nil {
 		return
 	}
-	if info.Uuid == "" {
+	if info.Rsid == "" {
 		updateFiledData := make(map[string]interface{})
 		updateFiledData["uuid"] = uuid
 		_, err = service.Attr().UpdateAppSubscriptionFieldByOriginalTransactionId(ctx, nil, originalTransactionId, updateFiledData)

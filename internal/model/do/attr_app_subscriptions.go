@@ -14,7 +14,7 @@ type AttrAppSubscriptions struct {
 	Id                    any // id
 	Environment           any // 环境
 	OrignialTransactionId any // 原始交易ID
-	Uuid                  any // 用户设备ID
+	Rsid                  any // 用户设备ID
 	Appid                 any // appID
 	ProductId             any // 产品ID
 	Status                any // 订阅状态 1-自动续订服务已激活 2-自动续订服务已过期自动  3-自动续订服务目前处于计费重试期 4-自动续订服务目前处于账单宽限期 5-自动续订订阅已取消

@@ -12,7 +12,7 @@ import (
 type AttrDevice struct {
 	g.Meta             `orm:"table:attr_device, do:true"`
 	Id                 any // id
-	Uuid               any // 设备ID
+	Rsid               any // 设备ID
 	Appid              any // 应用ID
 	AttrSubscriptionId any // 归因订阅ID
 	Country            any // 国家

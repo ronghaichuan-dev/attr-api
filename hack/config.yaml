@@ -6,4 +6,4 @@ gfcli:
     dao:
     - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/rszai"
       descriptionTag: true
-      tables: "attr_install,system_apps,attr_event_log"
+      tables: ""

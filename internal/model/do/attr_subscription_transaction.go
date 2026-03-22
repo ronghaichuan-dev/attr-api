@@ -19,7 +19,7 @@ type AttrSubscriptionTransaction struct {
 	OriginalTransactionId any // 原始交易ID
 	TransactionId         any // 子交易ID
 	InAppOwnership        any // 是否为用户购买 PURCHASED-购买 FAMILY_SHARED-家庭分享
-	Uuid                  any // 用户ID
+	Rsid                  any // 用户设备ID
 	ProductId             any // sku
 	Price                 any // 订阅金额
 	Currency              any // 币种

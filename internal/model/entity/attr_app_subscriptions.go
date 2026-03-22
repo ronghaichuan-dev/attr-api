@@ -9,7 +9,7 @@ type AttrAppSubscriptions struct {
 	Id                    int64  `json:"id"                    orm:"id"                      description:"id"`                                                                              // id
 	Environment           string `json:"environment"           orm:"environment"             description:"环境"`                                                                              // 环境
 	OrignialTransactionId string `json:"orignialTransactionId" orm:"orignial_transaction_id" description:"原始交易ID"`                                                                          // 原始交易ID
-	Uuid                  string `json:"uuid"                  orm:"uuid"                    description:"用户设备ID"`                                                                          // 用户设备ID
+	Rsid                  string `json:"rsid"                  orm:"rsid"                    description:"用户设备ID"`                                                                          // 用户设备ID
 	Appid                 string `json:"appid"                 orm:"appid"                   description:"appID"`                                                                           // appID
 	ProductId             string `json:"productId"             orm:"product_id"              description:"产品ID"`                                                                            // 产品ID
 	Status                int    `json:"status"                orm:"status"                  description:"订阅状态 1-自动续订服务已激活 2-自动续订服务已过期自动  3-自动续订服务目前处于计费重试期 4-自动续订服务目前处于账单宽限期 5-自动续订订阅已取消"` // 订阅状态 1-自动续订服务已激活 2-自动续订服务已过期自动  3-自动续订服务目前处于计费重试期 4-自动续订服务目前处于账单宽限期 5-自动续订订阅已取消

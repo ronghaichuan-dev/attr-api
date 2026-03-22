@@ -7,7 +7,7 @@ package entity
 // AttrDevice is the golang structure for table attr_device.
 type AttrDevice struct {
 	Id                 int64  `json:"id"                 orm:"id"                   description:"id"`           // id
-	Uuid               string `json:"uuid"               orm:"uuid"                 description:"设备ID"`         // 设备ID
+	Rsid               string `json:"rsid"               orm:"rsid"                 description:"设备ID"`         // 设备ID
 	Appid              string `json:"appid"              orm:"appid"                description:"应用ID"`         // 应用ID
 	AttrSubscriptionId int64  `json:"attrSubscriptionId" orm:"attr_subscription_id" description:"归因订阅ID"`       // 归因订阅ID
 	Country            string `json:"country"            orm:"country"              description:"国家"`           // 国家

@@ -22,7 +22,7 @@ type AttrDeviceDao struct {
 // AttrDeviceColumns defines and stores column names for the table attr_device.
 type AttrDeviceColumns struct {
 	Id                 string // id
-	Uuid               string // 设备ID
+	Rsid               string // 设备ID
 	Appid              string // 应用ID
 	AttrSubscriptionId string // 归因订阅ID
 	Country            string // 国家
@@ -41,7 +41,7 @@ type AttrDeviceColumns struct {
 // attrDeviceColumns holds the columns for the table attr_device.
 var attrDeviceColumns = AttrDeviceColumns{
 	Id:                 "id",
-	Uuid:               "uuid",
+	Rsid:               "rsid",
 	Appid:              "appid",
 	AttrSubscriptionId: "attr_subscription_id",
 	Country:            "country",
