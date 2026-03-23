@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"god-help-service/cmd/notification-svc/router"
+	"god-help-service/cmd/attrs-svc/router"
 	"god-help-service/internal/dao"
 	_ "god-help-service/internal/logic"
 	"god-help-service/internal/model/entity"

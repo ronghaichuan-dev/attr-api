@@ -52,7 +52,7 @@ services:
   notification-svc:
     build:
       context: .
-      dockerfile: cmd/notification-svc/Dockerfile
+      dockerfile: cmd/attrs-svc/Dockerfile
     image: notification-svc:latest
     container_name: god-help-notification-svc
     restart: unless-stopped
