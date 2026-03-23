@@ -13,3 +13,6 @@ rzsai
 *.json
 *.conf
 bin
+.claude
+.cursor
+.codex
