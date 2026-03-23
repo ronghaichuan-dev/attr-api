@@ -15,6 +15,8 @@ type (
 		Test(ctx context.Context)
 		// HandleAttributionTokens 处理归因Token的定时任务
 		HandleAttributionTokens(ctx context.Context)
+		// AggregateDailyStats 每日聚合统计任务
+		AggregateDailyStats(ctx context.Context)
 	}
 )
 

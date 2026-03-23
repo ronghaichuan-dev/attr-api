@@ -1,8 +1,3 @@
-// ================================================================================
-// Code generated and maintained by GoFrame CLI tool. DO NOT EDIT.
-// You can delete these comments if you wish manually maintain this interface file.
-// ================================================================================
-
 package service
 
 import (
@@ -16,6 +11,26 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
+// ClickRecord 点击记录参数
+type ClickRecord struct {
+	AppId        string
+	ClickType    string
+	Network      string
+	CampaignId   string
+	CampaignName string
+	AdgroupId    string
+	AdId         string
+	KeywordId    string
+	Creative     string
+	Idfa         string
+	Idfv         string
+	GpsAdid      string
+	Ip           string
+	UserAgent    string
+	ClickUrl     string
+	RedirectUrl  string
+}
+
 type (
 	IAttr interface {
 		Test()
@@ -28,6 +43,14 @@ type (
 		UpdateAttrDeviceField(ctx context.Context, tx gdb.TX, uuid string, updateData g.Map) error
 		GetAttrDevice(ctx context.Context, uuid []string) (map[string]struct{}, error)
 		CreateAttrDeviceOrUpdate(ctx context.Context, appid string, uuid string, country string) error
+		// CreateAttrDeviceOrUpdateWithAttribution 创建或更新设备归因记录（含归因信息）
+		CreateAttrDeviceOrUpdateWithAttribution(ctx context.Context, attr *app.Attribution, installId int64) error
+		// UpdateAttrDeviceSubscription 更新设备订阅相关字段
+		UpdateAttrDeviceSubscription(ctx context.Context, rsid string, appid string, updateData g.Map) error
+		// RecordClick 记录广告点击/展示
+		RecordClick(ctx context.Context, record *ClickRecord) error
+		// SendPostback 发送归因回传
+		SendPostback(ctx context.Context, postback *entity.AttrPostback) error
 		// GetEventByCode 根据事件编码获取事件详情
 		GetEventByCode(ctx context.Context, eventCode string) (*entity.AttrEvent, error)
 		// GetEventDropdownList 获取事件下拉选项列表

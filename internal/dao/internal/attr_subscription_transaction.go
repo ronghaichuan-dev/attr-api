@@ -36,6 +36,11 @@ type AttrSubscriptionTransactionColumns struct {
 	SubscribeStatus       string // 订阅状态
 	PurchaseAt            string // 购买时间
 	CreatedAt             string // 创建时间
+	Country               string // 国家
+	TrackerNetwork        string // 归因渠道
+	CampaignId            string // 推广活动ID
+	AdgroupId             string // 广告组ID
+	AdId                  string // 广告ID
 }
 
 // attrSubscriptionTransactionColumns holds the columns for the table attr_subscription_transaction.
@@ -55,6 +60,11 @@ var attrSubscriptionTransactionColumns = AttrSubscriptionTransactionColumns{
 	SubscribeStatus:       "subscribe_status",
 	PurchaseAt:            "purchase_at",
 	CreatedAt:             "created_at",
+	Country:               "country",
+	TrackerNetwork:        "tracker_network",
+	CampaignId:            "campaign_id",
+	AdgroupId:             "adgroup_id",
+	AdId:                  "ad_id",
 }
 
 // NewAttrSubscriptionTransactionDao creates and returns a new DAO object for table data access.

@@ -26,6 +26,14 @@ type AttrDeviceColumns struct {
 	Appid              string // 应用ID
 	AttrSubscriptionId string // 归因订阅ID
 	Country            string // 国家
+	TrackerNetwork     string // 归因渠道
+	CampaignId         string // 推广活动ID
+	AdgroupId          string // 广告组ID
+	AdId               string // 广告ID
+	KeywordId          string // 关键词ID
+	AttrInstallId      string // 关联安装归因记录ID
+	IsFirstInstall     string // 是否首次安装
+	Channel            string // 渠道来源
 	IsRefund           string // 是否退款 1-是 2-否
 	IsRenew            string // 是否续订
 	RenewCount         string // 续订次数
@@ -45,6 +53,14 @@ var attrDeviceColumns = AttrDeviceColumns{
 	Appid:              "appid",
 	AttrSubscriptionId: "attr_subscription_id",
 	Country:            "country",
+	TrackerNetwork:     "tracker_network",
+	CampaignId:         "campaign_id",
+	AdgroupId:          "adgroup_id",
+	AdId:               "ad_id",
+	KeywordId:          "keyword_id",
+	AttrInstallId:      "attr_install_id",
+	IsFirstInstall:     "is_first_install",
+	Channel:            "channel",
 	IsRefund:           "is_refund",
 	IsRenew:            "is_renew",
 	RenewCount:         "renew_count",

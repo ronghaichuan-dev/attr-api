@@ -19,6 +19,10 @@ type AttrAppSubscriptions struct {
 	LastEventAt           int64  `json:"lastEventAt"           orm:"last_event_at"           description:"上次事件时间"`                                                                          // 上次事件时间
 	ExpiresReason         int    `json:"expiresReason"         orm:"expires_reason"          description:"过期原因 1-无 2-订阅在计费重试期结束后过期 3-订阅因价格上涨过期 4-订阅因产品不可售过期 5-用户自愿取消订阅导致过期"`                // 过期原因 1-无 2-订阅在计费重试期结束后过期 3-订阅因价格上涨过期 4-订阅因产品不可售过期 5-用户自愿取消订阅导致过期
 	ExpiresAt             int64  `json:"expiresAt"             orm:"expires_at"              description:"过期时间"`                                                                            // 过期时间
+	OfferType             string `json:"offerType"             orm:"offer_type"              description:"优惠类型"`                                                                            // 优惠类型
+	OfferId               string `json:"offerId"               orm:"offer_id"                description:"优惠ID"`                                                                            // 优惠ID
+	RevocationDate        int64  `json:"revocationDate"        orm:"revocation_date"         description:"撤销时间"`                                                                            // 撤销时间
+	RevocationReason      int    `json:"revocationReason"      orm:"revocation_reason"       description:"撤销原因"`                                                                            // 撤销原因
 	CreatedAt             int64  `json:"createdAt"             orm:"created_at"              description:"创建时间"`                                                                            // 创建时间
 	UpdatedAt             int64  `json:"updatedAt"             orm:"updated_at"              description:"更新时间"`                                                                            // 更新时间
 }

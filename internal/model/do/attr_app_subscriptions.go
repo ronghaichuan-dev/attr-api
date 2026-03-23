@@ -24,6 +24,10 @@ type AttrAppSubscriptions struct {
 	LastEventAt           any // 上次事件时间
 	ExpiresReason         any // 过期原因 1-无 2-订阅在计费重试期结束后过期 3-订阅因价格上涨过期 4-订阅因产品不可售过期 5-用户自愿取消订阅导致过期
 	ExpiresAt             any // 过期时间
+	OfferType             any // 优惠类型
+	OfferId               any // 优惠ID
+	RevocationDate        any // 撤销时间
+	RevocationReason      any // 撤销原因
 	CreatedAt             any // 创建时间
 	UpdatedAt             any // 更新时间
 }

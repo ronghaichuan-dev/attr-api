@@ -18,7 +18,7 @@ database:
     port: 3306
     user: "root"
     pass: "chuan1992"
-    name: "god_help_service"
+    name: "rszai"
     charset: "utf8mb4"
     debug: true
     prefix: ""
@@ -47,7 +47,7 @@ appstore:
 gfcli:
   gen:
     dao:
-      - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/god_help_service"
+      - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/rszai"
         tables: "users"
         descriptionTag: true
 

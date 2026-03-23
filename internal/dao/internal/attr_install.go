@@ -60,6 +60,12 @@ type AttrInstallColumns struct {
 	AdServicesToken   string // 苹果归因token
 	IsFirstInstall    string // 是否首次安装
 	TokenResponseText string // 解析token原始数据
+	MatchType         string // 匹配方式: device_id/referrer/probabilistic/tracker/ad_services
+	MatchConfidence   string // 匹配置信度: high/medium/low
+	ClickId           string // 关联的点击记录ID
+	ClickToInstall    string // 点击到安装的时间间隔（秒）
+	Ip                string // 安装时IP
+	UserAgent         string // 安装时UA
 }
 
 // attrInstallColumns holds the columns for the table attr_install.
@@ -103,6 +109,12 @@ var attrInstallColumns = AttrInstallColumns{
 	AdServicesToken:   "ad_services_token",
 	IsFirstInstall:    "is_first_install",
 	TokenResponseText: "token_response_text",
+	MatchType:         "match_type",
+	MatchConfidence:   "match_confidence",
+	ClickId:           "click_id",
+	ClickToInstall:    "click_to_install",
+	Ip:                "ip",
+	UserAgent:         "user_agent",
 }
 
 // NewAttrInstallDao creates and returns a new DAO object for table data access.

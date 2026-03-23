@@ -113,5 +113,5 @@ type AppSubscriptionTrendReq struct {
 
 // AppSubscriptionTrendRes 获取应用订阅趋势响应参数结构体
 type AppSubscriptionTrendRes struct {
-	Trend []*entity.AppSubscriptions `json:"trend" dc:"订阅趋势数据"`
+	Trend []*entity.AttrAppSubscriptions `json:"trend" dc:"订阅趋势数据"`
 }

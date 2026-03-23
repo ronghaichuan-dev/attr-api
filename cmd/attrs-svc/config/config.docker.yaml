@@ -1,0 +1,61 @@
+server:
+  env: "dev"
+  address: ":8080"
+  serverRoot: "public"
+  indexFiles: ["index.html"]
+
+logger:
+  path: "/tmp/logs"
+
+database:
+  logger:
+    level: "all"
+    stdout: true
+    path: "/tmp/logs/sql"
+  default:
+    type: "mysql"
+    host: "127.0.0.1"
+    port: 3306
+    user: "root"
+    pass: "chuan1992"
+    name: "rszai"
+    charset: "utf8mb4"
+    debug: true
+    prefix: ""
+    pool:
+      maxIdle: 5
+      maxOpen: 10
+      maxLifetime: "300s"
+
+redis:
+  default:
+    address: "127.0.0.1:6379"
+    db: 0
+    pass: ""
+    pool:
+      maxIdle: 10
+      maxActive: 100
+      idleTimeout: "180s"
+
+jwt:
+  secret: "god-help-service-jwt-secret-key-2025"
+  expire: "7776000s"  # 30 days
+
+appstore:
+  env: "sandbox"
+
+gfcli:
+  gen:
+    dao:
+      - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/rszai"
+        tables: "users"
+        descriptionTag: true
+
+#AWS SQS服务（Docker LocalStack，使用容器名访问）
+aws:
+  region: "us-east-1"
+  endpoint: "http://god-help-localstack:4566"
+  accessKey: "test"
+  secretKey: "test"
+  queuePrefix: "dev-"
+  queueURL: ""

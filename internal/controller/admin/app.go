@@ -2,6 +2,8 @@ package admin
 
 import (
 	"context"
+	"god-help-service/internal/dao"
+	"god-help-service/internal/model/entity"
 	"god-help-service/internal/service"
 	"god-help-service/internal/util/logger"
 
@@ -9,6 +11,7 @@ import (
 
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // AppController 应用控制器
@@ -108,5 +111,20 @@ func (c *AppController) Delete(ctx context.Context, req *adminApi.AppDeleteReq) 
 func (c *AppController) SubscriptionTrend(ctx context.Context, req *adminApi.AppSubscriptionTrendReq) (*adminApi.AppSubscriptionTrendRes, error) {
 	logger.Debugf("解析后的请求参数: %v", req)
 
-	return &adminApi.AppSubscriptionTrendRes{Trend: nil}, nil
+	startDate := gtime.Now().AddDate(0, 0, -req.Days+1).Format("Y-m-d")
+	startDateTime := gtime.NewFromStr(startDate)
+
+	m := dao.AttrAppSubscriptions.Ctx(ctx).
+		Where("appid", req.AppId).
+		Where("created_at >= ?", startDateTime.Timestamp()).
+		Order("created_at DESC")
+
+	var subscriptions []*entity.AttrAppSubscriptions
+	err := m.Scan(&subscriptions)
+	if err != nil {
+		logger.Errorf("查询订阅趋势数据失败: %v", err)
+		return &adminApi.AppSubscriptionTrendRes{Trend: nil}, nil
+	}
+
+	return &adminApi.AppSubscriptionTrendRes{Trend: subscriptions}, nil
 }

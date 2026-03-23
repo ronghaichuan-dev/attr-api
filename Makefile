@@ -1,8 +1,8 @@
 # 服务名称
-SERVICES := admin-svc job-svc notification-svc
+SERVICES := admin-svc job-svc attrs-svc
 
 # Docker 镜像配置
-DOCKER_REGISTRY ?= github.com/rszai/attrs-api
+DOCKER_REGISTRY ?= github.com/rszai
 DOCKER_TAG ?= latest
 
 # 构建所有服务

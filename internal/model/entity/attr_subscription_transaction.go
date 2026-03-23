@@ -21,4 +21,9 @@ type AttrSubscriptionTransaction struct {
 	SubscribeStatus       string `json:"subscribeStatus"       orm:"subscribe_status"        description:"订阅状态"`                                    // 订阅状态
 	PurchaseAt            int64  `json:"purchaseAt"            orm:"purchase_at"             description:"购买时间"`                                    // 购买时间
 	CreatedAt             int64  `json:"createdAt"             orm:"created_at"              description:"创建时间"`                                    // 创建时间
+	Country               string `json:"country"               orm:"country"                 description:"国家"`                                      // 国家
+	TrackerNetwork        string `json:"trackerNetwork"        orm:"tracker_network"         description:"归因渠道"`                                    // 归因渠道
+	CampaignId            string `json:"campaignId"            orm:"campaign_id"             description:"推广活动ID"`                                  // 推广活动ID
+	AdgroupId             string `json:"adgroupId"             orm:"adgroup_id"              description:"广告组ID"`                                   // 广告组ID
+	AdId                  string `json:"adId"                  orm:"ad_id"                   description:"广告ID"`                                    // 广告ID
 }

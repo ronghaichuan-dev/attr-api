@@ -90,6 +90,14 @@ func initCronJobs() {
 		logger.Errorf("注册处理归因Token任务失败: %v", err)
 	}
 
+	// 每天凌晨 01:05 执行每日聚合统计
+	_, err = c.AddFunc("5 1 * * *", func() {
+		service.Crontab().AggregateDailyStats(ctx)
+	})
+	if err != nil {
+		logger.Errorf("注册每日聚合统计任务失败: %v", err)
+	}
+
 	c.Start()
 	logger.Info("Cron jobs started")
 }

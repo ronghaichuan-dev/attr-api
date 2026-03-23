@@ -91,6 +91,17 @@ func InitRouter(r *ghttp.Server) {
 	dashboardGroup.GET("/analytics", dashboard.DashboardAnalytics)
 	dashboardGroup.GET("/app/daily/trend", dashboard.AppDailyTrend)
 	dashboardGroup.GET("/app/select/list", dashboard.AppSelectList)
+	// 渠道效果分析
+	dashboardGroup.GET("/channel/overview", dashboard.ChannelOverview)
+	dashboardGroup.GET("/campaign/analysis", dashboard.CampaignAnalysis)
+	dashboardGroup.GET("/country/revenue", dashboard.CountryRevenue)
+	// 收入统计
+	dashboardGroup.GET("/revenue/trend", dashboard.RevenueTrend)
+	dashboardGroup.GET("/revenue/summary", dashboard.RevenueSummary)
+	dashboardGroup.GET("/revenue/by-product", dashboard.RevenueByProduct)
+	// LTV 分析
+	dashboardGroup.GET("/ltv/by-channel", dashboard.LtvByChannel)
+	dashboardGroup.GET("/ltv/cohort", dashboard.LtvCohort)
 
 	// 事件管理路由
 	event := new(admin.EventController)

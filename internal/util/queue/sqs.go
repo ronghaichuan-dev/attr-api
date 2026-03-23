@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"strings"
 	"sync"
 	"time"
 
@@ -32,14 +33,22 @@ type SQSConfig struct {
 }
 
 func getSQSConfig() SQSConfig {
-	return SQSConfig{
-		Region:      util.GetConfigString(context.Background(), "aws.region", "us-east-1"),
-		Endpoint:    util.GetConfigString(context.Background(), "aws.endpoint", "https://sqs.us-west-2.amazonaws.com"),
-		AccessKey:   util.GetConfigString(context.Background(), "aws.accessKey", ""),
-		SecretKey:   util.GetConfigString(context.Background(), "aws.secretKey", ""),
-		QueuePrefix: util.GetConfigString(context.Background(), "aws.queuePrefix", ""),
-		QueueURL:    util.GetConfigString(context.Background(), "aws.queueURL", "https://sqs.us-west-2.amazonaws.com/717279709976/rszai-free.fifo"),
+	ctx := context.Background()
+	config := SQSConfig{
+		Region:      util.GetConfigString(ctx, "aws.region", ""),
+		Endpoint:    util.GetConfigString(ctx, "aws.endpoint", ""),
+		AccessKey:   util.GetConfigString(ctx, "aws.accessKey", ""),
+		SecretKey:   util.GetConfigString(ctx, "aws.secretKey", ""),
+		QueuePrefix: util.GetConfigString(ctx, "aws.queuePrefix", ""),
+		QueueURL:    util.GetConfigString(ctx, "aws.queueURL", ""),
 	}
+	if config.Region == "" {
+		logger.Warnf("aws.region 未配置，请检查配置文件")
+	}
+	if config.Endpoint == "" {
+		logger.Warnf("aws.endpoint 未配置，请检查配置文件")
+	}
+	return config
 }
 
 func getProxyConfig() (string, string, string) {
@@ -80,11 +89,15 @@ func initSQS() error {
 			}
 		}
 
+		// 根据 endpoint 自动判断是否禁用 SSL（LocalStack 使用 http）
+		disableSSL := strings.HasPrefix(config.Endpoint, "http://")
+
 		sqsConfig := &aws.Config{
-			Region:     aws.String(config.Region),
-			Endpoint:   aws.String(config.Endpoint),
-			DisableSSL: aws.Bool(false),
-			LogLevel:   aws.LogLevel(aws.LogOff),
+			Region:           aws.String(config.Region),
+			Endpoint:         aws.String(config.Endpoint),
+			DisableSSL:       aws.Bool(disableSSL),
+			S3ForcePathStyle: aws.Bool(disableSSL), // LocalStack 需要路径风格
+			LogLevel:         aws.LogLevel(aws.LogOff),
 			HTTPClient: &http.Client{
 				Timeout:   30 * time.Second,
 				Transport: transport,
@@ -118,36 +131,24 @@ func GetQueueName(subject string) string {
 	return config.QueuePrefix + subject
 }
 
-func getDirectQueueURL() string {
-	config := getSQSConfig()
-	return config.QueueURL
-}
-
-func getQueueURL(queueName string) (string, error) {
+// ensureQueue 确保队列存在，不存在则自动创建，返回队列 URL
+func ensureQueue(queueName string) (string, error) {
 	if err := initSQS(); err != nil {
 		return "", err
 	}
 
+	// 先尝试获取
 	result, err := sqsClient.GetQueueUrl(&sqs.GetQueueUrlInput{
 		QueueName: aws.String(queueName),
 	})
-	if err != nil {
-		logger.Errorf("获取队列URL失败: %v", err)
-		return "", err
+	if err == nil {
+		return aws.StringValue(result.QueueUrl), nil
 	}
 
-	return aws.StringValue(result.QueueUrl), nil
-}
-
-func CreateQueue(queueName string) (string, error) {
-	if err := initSQS(); err != nil {
-		return "", err
-	}
-
-	fullQueueName := GetQueueName(queueName)
-
-	result, err := sqsClient.CreateQueue(&sqs.CreateQueueInput{
-		QueueName: aws.String(fullQueueName),
+	// 队列不存在，自动创建
+	logger.Infof("队列 %s 不存在，自动创建中...", queueName)
+	createResult, err := sqsClient.CreateQueue(&sqs.CreateQueueInput{
+		QueueName: aws.String(queueName),
 		Attributes: map[string]*string{
 			"VisibilityTimeout":             aws.String("30"),
 			"MessageRetentionPeriod":        aws.String("86400"),
@@ -159,33 +160,17 @@ func CreateQueue(queueName string) (string, error) {
 		return "", err
 	}
 
-	logger.Infof("SQS队列创建成功: %s, URL: %s", fullQueueName, aws.StringValue(result.QueueUrl))
-	return aws.StringValue(result.QueueUrl), nil
+	queueURL := aws.StringValue(createResult.QueueUrl)
+	logger.Infof("SQS队列创建成功: %s, URL: %s", queueName, queueURL)
+	return queueURL, nil
 }
 
 func PublishToQueue(queueName string, data []byte) error {
-	logger.Info("开始 PublishToQueue")
-
-	if err := initSQS(); err != nil {
-		logger.Errorf("initSQS失败: %v", err)
+	queueURL, err := ensureQueue(queueName)
+	if err != nil {
 		return err
 	}
-	logger.Info("initSQS完成")
 
-	// 先尝试获取队列URL，检查队列是否存在
-	queueURL, err := getQueueURL(queueName)
-	if err != nil {
-		logger.Warnf("队列不存在，正在创建: %s", queueName)
-		// 队列不存在，创建队列
-		queueURL, err = CreateQueue(queueName)
-		if err != nil {
-			logger.Errorf("CreateQueue失败: %v", err)
-			return err
-		}
-		logger.Infof("队列创建成功: %s", queueURL)
-	}
-
-	logger.Infof("开始发送消息到SQS, queueURL: %s", queueURL)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
@@ -198,24 +183,16 @@ func PublishToQueue(queueName string, data []byte) error {
 		return err
 	}
 
-	logger.Info("发送消息到SQS成功")
-
+	logger.Infof("发送消息到SQS成功, queue: %s", queueName)
 	return nil
 }
 
 type MessageHandler func(data []byte) error
 
 func ConsumeQueue(queueName string, handler MessageHandler) error {
-	if err := initSQS(); err != nil {
-		return err
-	}
-
-	queueURL, err := getQueueURL(queueName)
+	queueURL, err := ensureQueue(queueName)
 	if err != nil {
-		queueURL, err = CreateQueue(queueName)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 
 	logger.Infof("开始消费SQS队列: %s", queueName)

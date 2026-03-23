@@ -34,11 +34,27 @@ func (s *sAttr) SaveAttrSubscriptionTransaction(ctx context.Context, notificatio
 	}
 	if v2.Data != nil && v2.Data.TransactionInfo != nil {
 		var info entity.AttrAppSubscriptions
-		err := dao.AttrAppSubscriptions.Ctx(ctx).Fields("uuid").Where(dao.AttrAppSubscriptions.Columns().OrignialTransactionId, v2.Data.TransactionInfo.OriginalTransactionID).Scan(&info)
+		err := dao.AttrAppSubscriptions.Ctx(ctx).Fields("uuid", "rsid").Where(dao.AttrAppSubscriptions.Columns().OrignialTransactionId, v2.Data.TransactionInfo.OriginalTransactionID).Scan(&info)
 		if err != nil && !gerror.Equal(err, sql.ErrNoRows) {
 			return err
 		}
 		data.Rsid = info.Rsid
+
+		// 从 attr_device 获取归因渠道信息，关联收入到投放渠道
+		if info.Rsid != "" {
+			var device entity.AttrDevice
+			err = dao.AttrDevice.Ctx(ctx).
+				Fields("country", "tracker_network", "campaign_id", "adgroup_id", "ad_id").
+				Where("rsid", info.Rsid).
+				Scan(&device)
+			if err == nil {
+				data.Country = device.Country
+				data.TrackerNetwork = device.TrackerNetwork
+				data.CampaignId = device.CampaignId
+				data.AdgroupId = device.AdgroupId
+				data.AdId = device.AdId
+			}
+		}
 
 		if v2.Data.TransactionInfo.Environment != "" {
 			data.Envirment = v2.Data.TransactionInfo.Environment

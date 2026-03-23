@@ -5,6 +5,58 @@ const (
 	IsHandleTokenNo
 )
 
+// 归因匹配方式
+const (
+	MatchTypeDeviceId      = "device_id"      // 设备ID匹配（IDFA/GAID）
+	MatchTypeReferrer      = "referrer"        // Referrer匹配
+	MatchTypeProbabilistic = "probabilistic"   // 概率匹配
+	MatchTypeTracker       = "tracker"         // 第三方Tracker匹配
+	MatchTypeAdServices    = "ad_services"     // Apple Ad Services匹配
+)
+
+// 归因匹配置信度
+const (
+	MatchConfidenceHigh   = "high"
+	MatchConfidenceMedium = "medium"
+	MatchConfidenceLow    = "low"
+)
+
+// 归因窗口（秒）
+const (
+	ClickAttributionWindow      = 7 * 24 * 3600  // 点击归因窗口 7 天
+	ImpressionAttributionWindow = 24 * 3600       // 展示归因窗口 24 小时
+)
+
+// 点击类型
+const (
+	ClickTypeClick      = "click"
+	ClickTypeImpression = "impression"
+)
+
+// 回传状态
+const (
+	PostbackStatusSuccess = iota + 1
+	PostbackStatusFailed
+	PostbackStatusRetrying
+)
+
+// 回传类型
+const (
+	PostbackTypeInstall      = "install"
+	PostbackTypeEvent        = "event"
+	PostbackTypeReengagement = "reengagement"
+)
+
+// 订阅状态
+const (
+	SubscriptionStatusActive       = iota + 1 // 1-自动续订服务已激活
+	SubscriptionStatusExpired                  // 2-自动续订服务已过期
+	SubscriptionStatusBillingRetry             // 3-计费重试期
+	SubscriptionStatusGracePeriod              // 4-账单宽限期
+	SubscriptionStatusCanceled                 // 5-已取消
+	SubscriptionStatusRevoked                  // 6-已撤销
+)
+
 const (
 	IsTrialFreeYes = iota + 1
 	IsTrialFreeNo

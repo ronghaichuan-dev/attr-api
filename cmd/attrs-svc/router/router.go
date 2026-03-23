@@ -53,6 +53,11 @@ func InitRouter() *gin.Engine {
 	// 通知回调路由
 	apiGroup.POST("/notification/callback", notification.Callback)
 
+	// 点击/展示追踪路由
+	tracking := new(api.TrackingController)
+	apiGroup.GET("/tracking/click", tracking.Click)
+	apiGroup.GET("/tracking/impression", tracking.Impression)
+
 	logger.Info("Basic " + base64.StdEncoding.EncodeToString([]byte(validUsername+":"+validPassword)))
 	// APP路由组
 	appGroup := r.Group("/app/v1", gin.BasicAuth(gin.Accounts{validUsername: validPassword}))

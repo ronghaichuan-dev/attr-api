@@ -26,4 +26,9 @@ type AttrSubscriptionTransaction struct {
 	SubscribeStatus       any // 订阅状态
 	PurchaseAt            any // 购买时间
 	CreatedAt             any // 创建时间
+	Country               any // 国家
+	TrackerNetwork        any // 归因渠道
+	CampaignId            any // 推广活动ID
+	AdgroupId             any // 广告组ID
+	AdId                  any // 广告ID
 }

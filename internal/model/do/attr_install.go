@@ -50,4 +50,10 @@ type AttrInstall struct {
 	AdServicesToken   any // 苹果归因token
 	IsFirstInstall    any // 是否首次安装
 	TokenResponseText any // 解析token原始数据
+	MatchType         any // 匹配方式: device_id/referrer/probabilistic/tracker/ad_services
+	MatchConfidence   any // 匹配置信度: high/medium/low
+	ClickId           any // 关联的点击记录ID
+	ClickToInstall    any // 点击到安装的时间间隔（秒）
+	Ip                any // 安装时IP
+	UserAgent         any // 安装时UA
 }

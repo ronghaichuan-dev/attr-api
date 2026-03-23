@@ -56,6 +56,15 @@ jwt:
 gfcli:
   gen:
     dao:
-      - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/god_help_service"
+      - link: "mysql:root:chuan1992@tcp(127.0.0.1:3306)/rszai"
         tables: "users"
         descriptionTag: true
+
+#AWS SQS服务
+aws:
+  region: "us-west-2"
+  endpoint: "https://sqs.us-west-2.amazonaws.com"
+  accessKey: ""
+  secretKey: ""
+  queuePrefix: ""
+  queueURL: ""

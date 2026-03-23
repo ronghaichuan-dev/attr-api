@@ -34,6 +34,10 @@ type AttrAppSubscriptionsColumns struct {
 	LastEventAt           string // 上次事件时间
 	ExpiresReason         string // 过期原因 1-无 2-订阅在计费重试期结束后过期 3-订阅因价格上涨过期 4-订阅因产品不可售过期 5-用户自愿取消订阅导致过期
 	ExpiresAt             string // 过期时间
+	OfferType             string // 优惠类型
+	OfferId               string // 优惠ID
+	RevocationDate        string // 撤销时间
+	RevocationReason      string // 撤销原因
 	CreatedAt             string // 创建时间
 	UpdatedAt             string // 更新时间
 }
@@ -53,6 +57,10 @@ var attrAppSubscriptionsColumns = AttrAppSubscriptionsColumns{
 	LastEventAt:           "last_event_at",
 	ExpiresReason:         "expires_reason",
 	ExpiresAt:             "expires_at",
+	OfferType:             "offer_type",
+	OfferId:               "offer_id",
+	RevocationDate:        "revocation_date",
+	RevocationReason:      "revocation_reason",
 	CreatedAt:             "created_at",
 	UpdatedAt:             "updated_at",
 }
