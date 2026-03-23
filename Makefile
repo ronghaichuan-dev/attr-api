@@ -2,7 +2,7 @@
 SERVICES := admin-svc job-svc notification-svc
 
 # Docker 镜像配置
-DOCKER_REGISTRY ?=
+DOCKER_REGISTRY ?= github.com/rszai/attrs-api
 DOCKER_TAG ?= latest
 
 # 构建所有服务
