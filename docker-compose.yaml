@@ -3,9 +3,40 @@ services:
   # 基础设施服务
   # ========================
 
+  mysql:
+    image: mysql:8.0
+    container_name: rszai-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=chuan1992
+      - MYSQL_DATABASE=rszai
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: rszai-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   localstack:
     image: localstack/localstack:latest
-    container_name: god-help-localstack
+    container_name: rszai-localstack
     restart: unless-stopped
     ports:
       - "4566:4566"
@@ -29,8 +60,8 @@ services:
     build:
       context: .
       dockerfile: cmd/admin-svc/Dockerfile
-    image: admin-svc:latest
-    container_name: god-help-admin-svc
+    image: github.com/rszai/admin-svc:latest
+    container_name: rszai-admin-svc
     restart: unless-stopped
     ports:
       - "8802:8802"
@@ -38,13 +69,18 @@ services:
       - GF_GCFG_FILE=config.docker.yaml
     volumes:
       - ./cmd/admin-svc/config:/app/config
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   job-svc:
     build:
       context: .
       dockerfile: cmd/job-svc/Dockerfile
-    image: job-svc:latest
-    container_name: god-help-job-svc
+    image: github.com/rszai/job-svc:latest
+    container_name: rszai-job-svc
     restart: unless-stopped
     ports:
       - "8803:8803"
@@ -53,15 +89,19 @@ services:
     volumes:
       - ./cmd/job-svc/config:/app/config
     depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
       localstack:
         condition: service_healthy
 
-  notification-svc:
+  attrs-svc:
     build:
       context: .
       dockerfile: cmd/attrs-svc/Dockerfile
-    image: notification-svc:latest
-    container_name: god-help-notification-svc
+    image: github.com/rszai/attrs-svc:latest
+    container_name: rszai-attrs-svc
     restart: unless-stopped
     ports:
       - "8801:8801"
@@ -70,6 +110,10 @@ services:
     volumes:
       - ./cmd/attrs-svc/config:/app/config
     depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
       localstack:
         condition: service_healthy
 

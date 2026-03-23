@@ -23,10 +23,10 @@ database:
     path: "./tmp/logs/sql"
   default:
     type: "mysql"
-    host: "127.0.0.1"
+    host: "rszai-free.cpskgouuyk2e.us-west-2.rds.amazonaws.com"
     port: 3306
-    user: "root"
-    pass: "chuan1992"
+    user: "admin"
+    pass: "QtB5ltITLuSMCfTsNNRz"
     name: "rszai"
     charset: "utf8mb4"
     debug: true

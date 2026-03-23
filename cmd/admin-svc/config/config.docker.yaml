@@ -1,6 +1,6 @@
 server:
   env: "dev"
-  address: ":8080"
+  port: ":8802"
   serverRoot: "public"
   indexFiles: ["index.html"]
 
@@ -14,7 +14,7 @@ database:
     path: "/tmp/logs/sql"
   default:
     type: "mysql"
-    host: "127.0.0.1"
+    host: "rszai-mysql"
     port: 3306
     user: "root"
     pass: "chuan1992"
@@ -28,8 +28,11 @@ database:
       maxLifetime: "300s"
 
 redis:
+  addr: "rszai-redis:6379"
+  password: ""
+  db: 0
   default:
-    address: "127.0.0.1:6379"
+    address: "rszai-redis:6379"
     db: 0
     pass: ""
     pool:
